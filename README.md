@@ -1,24 +1,55 @@
-# docker
+# Docker
+
 Dockerfiles for building and running the FUNcube source
 
-run build.sh to build all the docker containers.
+## Pre-requisites
 
-base-context folder contains tar files of all the source used for the build container, done it this way for now to be sure of a repeatable build. The tar files can be updated (if needed) by running update.sh (first remove the cloned folders go, LimeSuite, funcubeLib).
+Linux target, Rasbian 4+ (RPi) or Debian 10+, tested on ARM and x86-64 architectures.
 
-develop.sh will create you a shell in the build container with the go and funcubeLib directories mounted from outside the container, this allows you to build everything and preserve the results.
+On target (RPi, x86 Debian), you will need the `docker.io` and `git` packages, the following notes may help when installing:
 
-# **Raspberry Pi based FUNcube Telemetry Receiver**
+ * Ensure `sudo iptables -L` command works before installing `docker.io`. If you experience an error, you may need to change the alternative:<br/>
+   `sudo update-alternatives --set iptables /usr/sbin/iptables-legacy`
+ * Now install packages:<br/>
+   `sudo apt-get install docker.io git`
+ * Add the default user (eg: `pi` or yourself) to the `docker` group:<br/>
+   `sudo adduser pi docker`
+ * Reboot to ensure everything comes up, check with:<br/>
+   `docker ps`<br/>
+   which should not show any errors.
 
+## Build steps
 
+```bash
+# get the dockerfiles to build the containers
+git clone git://github.com/funcube-dev/docker.git
+cd docker
+# gets the latest code, *note* update will refuse to overwrite code directories (for safety) so 
+# to re-run you will need to manualy remove one or more of them (LimeSuite, go, funcubeLib)
+./update.sh
+# builds the build container and the code.
+./build.sh
+```
+
+In addition to the `build.sh` script there is a `develop.sh` script that will start a bash shell in a docker container with all the tools GCC/G++/golang etc to work on the code. This container mounts the go and funcubeLib subdirectories from the host OS, so changes made to the code in the container are persisted outside.
+
+run `build.sh` to build all the docker containers.
+
+base-context folder contains tar files of all the source used for the build container, done it this way for now to be sure of a repeatable build. The tar files can be updated (if needed) by running `update.sh` (first remove the cloned folders go, LimeSuite, funcubeLib).
+
+`develop.sh` will create you a shell in the build container with the go and funcubeLib directories mounted from outside the container, this allows you to build everything and preserve the results.
+
+## **Raspberry Pi based FUNcube Telemetry Receiver**
 
 To create the configuration files, type the following at a command prompt
-
+```bash
 	sudo mkdir /boot/config
 
 	cd /boot/config
 
 	sudo touch fcdecode.conf
 	sudo touch fcwarehouse.conf
+```
 
 Using an editor of your choice, edit the fcdecode.conf file and add the following
 
@@ -60,7 +91,7 @@ Using an editor of your choice, edit the fcwarehouse.conf file and add the follo
 	#url = "http://data.amsat-uk.org/"
 
 
-# Starting the Decode Container #
+## Starting the Decode Container
 
 With all of the above steps carried out, create a script file in your home directory with the following contents:-
 
@@ -74,7 +105,6 @@ With all of the above steps carried out, create a script file in your home direc
 	           fcrun:1.0.5
 
 Make sure the FUNcube Dongle (Pro or Pro +) is plugged into the Raspberry Pi.
-
 
 Execute this script file in a terminal for an interactive docker session.
 
