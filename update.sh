@@ -6,7 +6,7 @@ echo Using path: $CURRENT_DIR
 DEST_PATH="$CURRENT_DIR/LimeSuite"
 if [ ! -d "$DEST_PATH" ]; then
   echo "******* UPDATING - $DEST_PATH"
-  git clone --depth 1 --branch v20.01.0 git://github.com/myriadrf/LimeSuite.git && \
+  git clone --depth 1 --branch v20.01.0 https://github.com/myriadrf/LimeSuite.git && \
     tar --exclude .git \
         -cvzf LimeSuite.tar.gz LimeSuite/ && \
     rm $CURRENT_DIR/base-context/LimeSuite.tar.gz && \
@@ -19,7 +19,7 @@ fi
 DEST_PATH="$CURRENT_DIR/go"
 if [ ! -d "$DEST_PATH" ]; then
   echo "******* UPDATING - $DEST_PATH"
-  git clone --depth 1 git://github.com/funcube-dev/go.git && \
+  git clone --depth 1 https://github.com/funcube-dev/go.git && \
     tar --exclude .git \
         -cvzf go.tar.gz go/ && \
     rm $CURRENT_DIR/base-context/go.tar.gz && \
@@ -32,7 +32,7 @@ fi
 DEST_PATH="$CURRENT_DIR/funcubeLib"
 if [ ! -d "$DEST_PATH" ]; then
   echo "******* UPDATING - $DEST_PATH"
-  git clone --depth 1 git://github.com/funcube-dev/funcubeLib.git && \
+  git clone --depth 1 https://github.com/funcube-dev/funcubeLib.git && \
     tar --exclude .git \
         -cvzf funcubeLib.tar.gz funcubeLib/ && \
     rm $CURRENT_DIR/base-context/funcubeLib.tar.gz && \
